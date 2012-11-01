@@ -48,7 +48,7 @@ vector<double> dif(const vector<double> &y, const vector<double> &x);
 /**
  * @brief Producto de un vector por un escalar (aunque el nombre no lo sugiera).
  */
-vector<double> prod_escalar(const vector<double> &x, double nu);
+Pos prod_escalar(const Pos &x, double nu);
 
 
 /**
@@ -79,6 +79,14 @@ double signo(double valor);
 double gaussiana(Punto &x, Punto &media, double sigma2);
 
 
+/**
+*@brief : normaliza un vector y lo devuelve en el mismo
+*/
+void normalizar(Pos &X);
 
+/**
+*@brief : calcula el vector normalizado y lo devuelve. X queda intacto
+*/
+/*Pos normalizar(Pos &X);*/
 
 #endif

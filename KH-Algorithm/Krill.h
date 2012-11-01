@@ -1,6 +1,9 @@
 #ifndef KRILL_H
 #define KRILL_H
 #include <vector>
+#include <cmath>
+#include <cstdlib>
+
 using namespace std;
 
 typedef vector<double> Pos;
@@ -12,13 +15,9 @@ private:
 	int id; ///<identificador del Krill sirve solo para saber si dos krilles son diferentes o no
 	
 	Pos N; ///<Motion induced by other individuals 
-	Pos alpha_l; ///<alpha local
-	Pos alpha_t; ///<alpha target
-	double w;///<inertia weight
+	double wn;///<inertia weight
 	
 	Pos F; ///<Foraging Motion
-	double Beta_food; ///<
-	double Beta_best; ///<
 	double wf;///<inertia weight
 	
 	Pos D; ///<Physical diffusion
@@ -33,7 +32,7 @@ public:
 	Krill(Pos inicial, int);
 	~Krill();
 	bool operator ==(Krill &B);
-	void update_pos();
+	void actualizar_pos(Pos &alpha_i,Pos &Beta_i, double &D_coef); ///< alpha y beta vectores directore. D_coef=D_max*(1-I/I_max)
 	void cruzar();
 	void mutar();
 	double distancia(Krill &B);

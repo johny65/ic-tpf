@@ -1,5 +1,6 @@
 #include "Krill.h"
-#include <cmath>
+#include "func.h"
+
 using namespace std;
 
 Krill::Krill(Pos inicial, int dni) {
@@ -13,12 +14,10 @@ Krill::~Krill() {
 }
 
 bool Krill::operator ==(Krill &B){
-	if(this->id=B.get_id()) return true;
+	if(this->id==B.get_id()) return true;
 	else return false;
 }
-void Krill::update_pos(){
-	
-}
+
 void Krill::cruzar(){
 	
 }
@@ -42,4 +41,18 @@ double Krill::distancia(Krill &B){
 	return d;
 }
 
-
+void Krill::actualizar_pos(Pos &alpha_i,Pos &Beta_i, double &D_coef){
+	
+	///<Genero el vector direccion aletorio gamma y lo normalizo
+	for(int i=0;i<this->dim;i++) { 
+		this->D.push_back((rand()%100)/100.0);
+	}
+	normalizar(this->D);
+	this->D=prod_escalar(this->D,D_coef);
+	this->N=sum(alpha_i,prod_escalar(this->N,this->wn));
+	this->F=sum(Beta_i,prod_escalar(this->F,this->wf));
+	
+	//Actualizo la posicion
+	this->X=sum(this->X,prod_escalar(sum(this->N,sum(this->F,this->D)),this->dt));
+	
+}

@@ -58,9 +58,9 @@ vector<double> dif(const vector<double> &y, const vector<double> &x)
 	return r;
 }
 
-vector<double> prod_escalar(const vector<double> &x, double &nu)
+Pos prod_escalar(const Pos &x, double nu)
 {
-	vector<double> y;
+	Pos y;
 	int n=x.size();
 	for(int i=0;i<n;++i){
 		y.push_back(nu*x[i]);
@@ -99,5 +99,24 @@ double gaussiana(Punto &x, Punto &media, double sigma2)
 	return res;
 }
 
+void normalizar(Pos &X){
+	double n=0;
+	for(int i=0;i<X.size();i++) { 
+		n+=X[i]*X[i];
+	}
+	n=(1/n);
+	X=prod_escalar(X,n);
+	
+}
 
+//Pos normalizar(Pos &X){
+//	Pos Y;
+//	double n=0;
+//	for(int i=0;i<X.size();i++) { 
+//		n+=X[i]*X[i];
+//	}
+//	n=(1/n);
+//	Y=prod_escalar(X,n);
+//	return Y;
+//}
 
