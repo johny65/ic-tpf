@@ -109,14 +109,12 @@ void normalizar(Pos &X){
 	
 }
 
-//Pos normalizar(Pos &X){
-//	Pos Y;
-//	double n=0;
-//	for(int i=0;i<X.size();i++) { 
-//		n+=X[i]*X[i];
-//	}
-//	n=(1/n);
-//	Y=prod_escalar(X,n);
-//	return Y;
-//}
+
+double modulo(Pos &X){
+	double m=0;
+	for(int i=0;i<X.size();i++) { 
+		m+=pow(X[i],2);
+	}
+	return sqrt(m);
+}
 

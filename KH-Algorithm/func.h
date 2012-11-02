@@ -89,4 +89,6 @@ void normalizar(Pos &X);
 */
 /*Pos normalizar(Pos &X);*/
 
+double modulo(Pos &X);
+
 #endif
