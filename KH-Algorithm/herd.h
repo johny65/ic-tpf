@@ -24,7 +24,7 @@ private:
 	bool graf; ///<Opcion para graficar
 	
 	///<Funciones
-	Pos calc_pos_food();
+	void calc_pos_food();
 	vector<int> vecinos(Krill &A);
 	void calc_best_peor(int &, int &,double &, double &); ///<devuelve el indice del mejor y peor individuo dentro de la Manada
 	void calc_best_food(int &);
@@ -35,15 +35,17 @@ private:
 	Pos calc_alpha_t(int);
 	double distancia(int i,int j);
 	
+	
 public:
-	herd(int cant_k, int dimension, int max, vector<pair<double,double> >);
+	herd(int cant_k, int dimension, int max, vector<pair<double,double> >, double delta_t);
 	~herd();
 	void set_fitness(); ///<Setea la funcion de fitness a utilizar "ver como hacer esto"
 	void set_max_it(int);
-	void set_sensing_d(double); ///<Setea la distancia para evaluar los vecinos
+//	void set_sensing_d(double); ///<Setea la distancia para evaluar los vecinos
 	void set_graf(bool); ///<True: si se desea graficar 
 	void Optimizar(); ///<Rutina principal; resuelve el problema
-	
+	void mostrar_posiciones();
+	void mostrar_vector(Pos &v);
 };
 
 #endif

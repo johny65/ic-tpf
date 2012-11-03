@@ -38,8 +38,9 @@ vector<double> init_weight(int nd)
 
 vector<double> sum(const vector<double> &y, const vector<double> &x)
 {
+	
 	assert(y.size() == x.size());
-	vector<double> r;
+	Pos r;
 	int n=y.size();
 	for(int i=0;i<n;++i){
 		r.push_back(y[i]+x[i]);
@@ -101,20 +102,30 @@ double gaussiana(Punto &x, Punto &media, double sigma2)
 
 void normalizar(Pos &X){
 	double n=0;
-	for(int i=0;i<X.size();i++) { 
+	for(size_t i=0;i<X.size();i++) { 
 		n+=X[i]*X[i];
 	}
-	n=(1/n);
-	X=prod_escalar(X,n);
+	n=(1/(sqrt(n)+0.01));
+	if(n!=0){
+		X=prod_escalar(X,n);
+		
+	}
 	
 }
 
 
 double modulo(Pos &X){
 	double m=0;
-	for(int i=0;i<X.size();i++) { 
+	if(X.size()==1) {return abs(X.at(0));}
+	for(size_t i=0;i<X.size();i++) { 
 		m+=pow(X[i],2);
 	}
 	return sqrt(m);
 }
 
+void mostrar(Pos &Y){
+	for(size_t i=0;i<Y.size();i++) { 
+		cout<<Y[i]<<", ";
+	}
+	cout<<endl;
+}

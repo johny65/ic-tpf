@@ -30,7 +30,7 @@ private:
 	
 	
 public:
-	Krill(Pos inicial, int);
+	Krill(Pos inicial, int, double);
 	~Krill();
 	bool operator ==(Krill &B);
 	void actualizar_pos(Pos &alpha_i,Pos &Beta_i_food, double &D_coef); ///< alpha y beta vectores directore. D_coef=D_max*(1-I/I_max)

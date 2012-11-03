@@ -1,12 +1,27 @@
 #include "Krill.h"
 #include "func.h"
 
+#include <iostream>
 using namespace std;
 
-Krill::Krill(Pos inicial, int dni) {
+Krill::Krill(Pos inicial, int dni,double delta_t) {
 	this->X=inicial;
 	this->dim=this->X.size();
 	this->id=dni;
+	this->wn=(rand()%100)/100.0;
+	this->wf=(rand()%100)/100.0;
+	this->dt=delta_t;
+	
+	//Inicializo la mejor posicion lograda como la posicion actual
+	this->Beta_best=this->X;
+	
+	//Inicializo N,F
+	for(int i=0;i<this->dim;i++) { 
+		this->N.push_back(0);
+		this->F.push_back(0);
+		this->D.push_back(0);
+	}
+
 	
 }
 
@@ -43,22 +58,27 @@ double Krill::distancia(Krill &B){
 }
 
 void Krill::actualizar_pos(Pos &alpha_i,Pos &Beta_i_food, double &D_coef){
-	
+	///< to do: falta considera N_max, y Vf
 	///<Genero el vector direccion aletorio gamma y lo normalizo
 	for(int i=0;i<this->dim;i++) { 
-		this->D.push_back((rand()%100)/100.0);
+		this->D[i]=((rand()%100)/100.0);
 	}
 	normalizar(this->D);
 	this->D=prod_escalar(this->D,D_coef);
 	
-	this->N=sum(alpha_i,prod_escalar(this->N,this->wn));
+	Pos temp=prod_escalar(this->N,this->wn);
+
+	this->N=sum(alpha_i,temp);
+
 	
-	Pos Beta_i=sum(this->Beta_best,Beta_i_food);
-	this->F=sum(Beta_i,prod_escalar(this->F,this->wf));
+	//Pos Beta_i=sum(this->Beta_best,Beta_i_food);
 	
+	
+	this->F=sum(sum(this->Beta_best,Beta_i_food),prod_escalar(this->F,this->wf));
+
 	//Actualizo la posicion
 	this->X=sum(this->X,prod_escalar(sum(this->N,sum(this->F,this->D)),this->dt));
-	
+	//mostrar(this->X);
 }
 
 void Krill::set_dist_sensing(double d){

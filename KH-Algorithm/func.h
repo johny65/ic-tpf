@@ -90,5 +90,5 @@ void normalizar(Pos &X);
 /*Pos normalizar(Pos &X);*/
 
 double modulo(Pos &X);
-
+void mostrar(Pos &Y);
 #endif
