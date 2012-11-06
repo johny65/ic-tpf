@@ -70,9 +70,11 @@ void herd::Optimizar(){
 	//Para el movimiento forrajero 
 	Pos beta_food, beta_best; 
 	double fitness_beta_food, fitness_beta_best;
-
+	double K_CM; // K_CM: contante K de cruza y mutacion
 	
 	while(c<this->max_it){
+		
+		
 		
 		//Calculo las distancia de sensado de cada krill;
 		for(int i=0;i<this->num_krill;i++) {  
@@ -80,46 +82,50 @@ void herd::Optimizar(){
 		}
 		
 		calcular_coef(c); //Calcula los coeficiente C_best, C_food y D_diffusion
-		calc_pos_food();
+		calc_pos_food(); //Calculo la posicion de la comida
 		
-		//1-calculo el mejor y el peor individuo y su fitness asociado
-		calc_best_peor(this->mejor,this->peor,this->K_best,this->K_worst);
+		//calculo el mejor y el peor individuo y su fitness asociado
+		calc_best_peor(this->mejor,this->peor,this->K_best,this->K_worst); 
 		
-		//2-calculo la posicion de la comida
-		calc_pos_food();
+		
 		cout<<"Posicion de la comida ";	mostrar_vector(this->food);
-		mostrar_posiciones();
+		mostrar_posiciones(); //muestro las posiciones de los Krill
 		
 		cout<<"el mejor esta en la posicion "<<this->mejor<<" su fitness es "<<this->K_best<<endl;
 		cout<<"el peor esta en la posicion "<<this->peor<<" su fitness es "<<this->K_worst<<endl<<endl;
 		
 		for(int i=0;i<this->num_krill;i++) { 
 			
-			cout<<"Para el Krill "<<i<<endl<<"---------------------------------"<<endl<<endl;
+			//cout<<"Para el Krill "<<i<<endl<<"---------------------------------"<<endl<<endl;
 			//-a) Calculo la distancia de sensado del i-esimo Krill y calculo alpha_local y alpha_target
 			alpha_local=calc_alpha_l(i); //calculo el alfa local (4)
 			alpha_target=calc_alpha_t(i); //calculo el alfa target (8)
 			alpha_total=sum(alpha_local,alpha_target); //calculo alfa total (3)
-			cout<<"alpha_target es "; mostrar_vector(alpha_target); cout<<"alpha_local es "; mostrar_vector(alpha_local);
+			//cout<<"alpha_target es "; mostrar_vector(alpha_target); cout<<"alpha_local es "; mostrar_vector(alpha_local);
 
 			
 			//-b) Calculo las componentes para el foraging motion beta_i
-
-//			cout<<"antes de entrar al foraging motion "<<endl;
 			calc_Xs_Ks(this->M[i].get_pos(),this->food,beta_food,fitness_beta_food);
 			fitness_beta_food=this->C_food*fitness_beta_food;
-		/*	cout<<"el fitness de beta es "<<fitness_beta_food<<endl;*/
-			beta_food=prod_escalar(beta_food,fitness_beta_food);
+			beta_food=prod_escalar(beta_food,fitness_beta_food); //Calculo beta_food (13)
 			
-//			//Actualizo beta_best
+//			//Actualizo beta_best (15)
 			calc_Xs_Ks(this->M[i].get_pos(),this->M[i].get_beta_best(),beta_best,fitness_beta_best);
 			beta_best=prod_escalar(beta_best,fitness_beta_best);
 			this->M[i].set_beta_best(beta_best);
+
+			//-c) calculo probabilidades de cruza y mutacion
+			K_CM=(fitness(this->M[i].get_pos())-this->K_best)/(this->K_worst-this->K_best); //K de la ecuacion (21) y (23)
+			this->M[i].set_prob(K_CM);
 			
-			cout<<"vector alpha_total "; mostrar_vector(alpha_total);
-			cout<<"vector beta_food ";mostrar_vector(beta_food);
-			///<to do: cruzar y mutar en este punto;
-			///<Actualizo la posicion del i-esimo Krill
+			//-d) cruzo y muto
+			this->M[i].cruzar();
+			this->M[i].mutar();
+			
+//			cout<<"vector alpha_total "; mostrar_vector(alpha_total);
+//			cout<<"vector beta_food ";mostrar_vector(beta_food);
+			///<to do: implementar cruzar y mutar
+			//e)-Actualizo la posicion del i-esimo Krill
 			this->M[i].actualizar_pos(alpha_total,beta_food,this->D_diffusion);
 			cout<<endl;
 		}
@@ -194,7 +200,8 @@ double herd::distancia(int i,int j){
 double herd::fitness(Pos X){
 	//Funcion del paper Z=X*e^(x^2+y^2);
 	double f;
-	f=-X.at(0)*sin(sqrt(abs(X.at(0))));
+	if(abs(X.at(0))>512) f=100000;
+	else f=-X.at(0)*sin(sqrt(abs(X.at(0))));
 	//f=X.at(0)*exp(pow(X.at(0),2)+pow(X.at(1),2));
 	return f;
 }

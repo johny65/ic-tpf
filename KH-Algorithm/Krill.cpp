@@ -15,7 +15,7 @@ Krill::Krill(Pos inicial, int dni,double delta_t) {
 	//Inicializo la mejor posicion lograda como la posicion actual
 	this->Beta_best=this->X;
 	
-	//Inicializo N,F
+	//Inicializo N,F y D como los vectores 0
 	for(int i=0;i<this->dim;i++) { 
 		this->N.push_back(0);
 		this->F.push_back(0);
@@ -39,6 +39,11 @@ void Krill::cruzar(){
 }
 void Krill::mutar(){
 	
+}
+
+void Krill::set_prob(double &K){
+	this->prob_cruza=0.2*K;
+	this->prob_mutar=0.05/K;
 }
 
 Pos &Krill::get_pos(){

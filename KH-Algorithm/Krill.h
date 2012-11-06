@@ -26,6 +26,9 @@ private:
 	double wf; ///<inercia para el movimiento forrajero
 
 	
+	double prob_cruza; ///< Probabilidad de cruza
+	double prob_mutar; ///< Probabilidad de mutacion 
+	
 	
 	
 	
@@ -43,6 +46,7 @@ public:
 	int get_id();
 	void set_dist_sensing(double);
 	void set_beta_best(Pos &);
+	void set_prob(double &K);///<Setea las probabilidades de cruza y mutacion que tiene el Krill
 	
 };
 

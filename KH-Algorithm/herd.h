@@ -22,6 +22,7 @@ private:
 	double K_best, K_worst; ///<Mejor fitness y peor fitness en cada iteracion
 	int mejor, peor; ///<indices del mejor y el peor
 	bool graf; ///<Opcion para graficar
+
 	
 	///<Funciones
 	void calc_pos_food();

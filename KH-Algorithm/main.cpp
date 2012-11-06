@@ -9,7 +9,7 @@ int main (int argc, char *argv[]) {
 	vector<pair<double,double> > r;
 	r.push_back(k); r.push_back(k);
 	
-	herd Manada(10,1,10,r,1.5);
+	herd Manada(15,1,10,r,1.5);
 	Manada.Optimizar();
 	return 0;
 }
