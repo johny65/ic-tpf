@@ -10,7 +10,7 @@ typedef vector<double> Pos;
 
 class Krill {
 private:
-	double dt; ///<diferencial te tiempo (muy importante)
+	double dt; ///<diferencial de tiempo (muy importante)
 	int dim; ///<dimension del problema
 	int id; ///<identificador del Krill sirve solo para saber si dos krilles son diferentes o no
 	
@@ -29,17 +29,20 @@ private:
 	double prob_cruza; ///< Probabilidad de cruza
 	double prob_mutar; ///< Probabilidad de mutacion 
 	
+	double N_max; ///< Maxima velocidad para el movimiento inducido
+	double V_foraging; ///< Maxima velocidad para el movimiento forrajero
+	double D_max; ///< Maxima velocidad para el movimiento aletorio (debe ser un num entre [0.002,0.010])
 	
 	
 	
 public:
-	Krill(Pos inicial, int, double);
+	Krill(Pos inicial, int, double,double,double,double);
 	~Krill();
-	bool operator ==(Krill &B);
+//	bool operator ==(Krill &B);
 	void actualizar_pos(Pos &alpha_i,Pos &Beta_i_food, double &D_coef); ///< alpha y beta vectores directore. D_coef=D_max*(1-I/I_max)
 	void cruzar(Krill &krillin);
 	void mutar(Krill &gbest, Krill &A, Krill &B);
-	double distancia(Krill &B);
+/*	double distancia(Krill &B);*/
 	double get_dist_sensing();
 	Pos &get_beta_best();
 	Pos &get_pos();

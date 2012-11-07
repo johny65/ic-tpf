@@ -105,7 +105,7 @@ void normalizar(Pos &X){
 	for(size_t i=0;i<X.size();i++) { 
 		n+=X[i]*X[i];
 	}
-	n=(1/(sqrt(n)+0.01));
+	n=(1/(sqrt(n)+0.0001));
 	if(n!=0){
 		X=prod_escalar(X,n);
 		
