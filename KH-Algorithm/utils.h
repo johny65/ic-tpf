@@ -12,6 +12,7 @@
 
 
 
+#include "Krill.h"
 using namespace std;
 
 /**
@@ -78,5 +79,8 @@ void pesos_a_archivo(vector< vector<double> > pesos);
 * @param archivo Es el nombre del archivo del que se van a extraer los datos.
 */
 vector< vector<double> > pesos_desde_archivo(const char * archivo);
+
+
+void crear_dat_krill(vector<Krill> &,vector<double> &, const char *name);
 
 #endif

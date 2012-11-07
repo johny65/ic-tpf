@@ -4,13 +4,16 @@
 #include <iostream>
 using namespace std;
 
-Krill::Krill(Pos inicial, int dni,double delta_t) {
+Krill::Krill(Pos inicial, int dni,double delta_t, double N_m, double V_f, double D_m) {
 	this->X=inicial;
 	this->dim=this->X.size();
 	this->id=dni;
 	this->wn=(rand()%100)/100.0;
 	this->wf=(rand()%100)/100.0;
 	this->dt=delta_t;
+	this->N_max=N_m;
+	this->V_foraging=V_f;
+	this->D_max=D_m;
 	
 	//Inicializo la mejor posicion lograda como la posicion actual
 	this->Beta_best=this->X;
@@ -29,10 +32,10 @@ Krill::~Krill() {
 	
 }
 
-bool Krill::operator ==(Krill &B){
-	if(this->id==B.get_id()) return true;
-	else return false;
-}
+//bool Krill::operator ==(Krill &B){
+//	if(this->id==B.get_id()) return true;
+//	else return false;
+//}
 
 void Krill::cruzar(){
 	
@@ -53,14 +56,14 @@ int Krill::get_id(){
 	return this->id;
 }
 
-double Krill::distancia(Krill &B){
-	double d=0;
-	Pos KB=B.get_pos(); ///< Posicion del Krill B
-	for(int i=0;i<this->dim;i++) { 
-		d+=pow(this->X[i]-KB[i],2);
-	}
-	return d;
-}
+//double Krill::distancia(Krill &B){
+//	double d=0;
+//	Pos KB=B.get_pos(); ///< Posicion del Krill B
+//	for(int i=0;i<this->dim;i++) { 
+//		d+=pow(this->X[i]-KB[i],2);
+//	}
+//	return d;
+//}
 
 void Krill::actualizar_pos(Pos &alpha_i,Pos &Beta_i_food, double &D_coef){
 	///< to do: falta considera N_max, y Vf
@@ -69,17 +72,17 @@ void Krill::actualizar_pos(Pos &alpha_i,Pos &Beta_i_food, double &D_coef){
 		this->D[i]=((rand()%100)/100.0);
 	}
 	normalizar(this->D);
-	this->D=prod_escalar(this->D,D_coef);
+	this->D=prod_escalar(this->D,D_coef*this->D_max);
 	
 	Pos temp=prod_escalar(this->N,this->wn);
 
-	this->N=sum(alpha_i,temp);
+	this->N=sum(prod_escalar(alpha_i,this->N_max),temp);
 
 	
 	//Pos Beta_i=sum(this->Beta_best,Beta_i_food);
 	
 	
-	this->F=sum(sum(this->Beta_best,Beta_i_food),prod_escalar(this->F,this->wf));
+	this->F=sum(prod_escalar(sum(this->Beta_best,Beta_i_food),this->V_foraging),prod_escalar(this->F,this->wf));
 
 	//Actualizo la posicion
 	this->X=sum(this->X,prod_escalar(sum(this->N,sum(this->F,this->D)),this->dt));

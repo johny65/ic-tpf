@@ -139,3 +139,26 @@ vector< vector<double> > pesos_desde_archivo(const char * archivo){
 	}
 	return pesos;
 }
+
+
+void crear_dat_krill(vector<Krill> &A, vector<double> &fitn, const char *name){
+	std::ostringstream ss;
+	ofstream out(name, ios::trunc);
+	vector<Krill>::iterator q=A.begin();
+	Pos X;
+	int c=0;
+	while(q!=A.end()){
+		X=(*q).get_pos();
+		for(size_t i=0;i<X.size();i++) {  
+			ss << X[i] << " ";
+		}
+		ss << fitn.at(c)<< "\n";
+		c++;
+		q++;
+	}
+	
+	out<<"# archivo temporal usado para graficar error en gnuplot\n";
+	out<<ss.str();
+	out.close();
+	
+}
