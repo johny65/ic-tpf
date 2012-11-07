@@ -119,8 +119,28 @@ void herd::Optimizar(){
 			this->M[i].set_prob(K_CM);
 			
 			//-d) cruzo y muto
-			this->M[i].cruzar();
-			this->M[i].mutar();
+			/*
+			 * Para la cruza se selecciona un individuo aleatoriamente (fórmula 20;
+			 * a diferencia de DE, donde la cruza es con el vector de prueba u_i(t),
+			 * acá es con otro individuo de la población X_r distinto)
+			 */
+			int r = i;
+			while (r == i)
+				r = rand()%this->num_krill;
+			this->M[i].cruzar(this->M[r]);
+
+			/*
+			 * Para la mutación calcula el vector de prueba u_i(t) usando el
+			 * mejor krill de la población, y 2 krills distintos elegidos al azar.
+			 */
+			r = i;
+			while (r == i)
+				r = rand()%this->num_krill;
+			int r2 = r;
+			while (r2 == r || r2 == i)
+				r2 = rand()%this->num_krill;
+			this->M[i].mutar(this->M[this->mejor], this->M[r], this->M[r2]);
+
 			
 //			cout<<"vector alpha_total "; mostrar_vector(alpha_total);
 //			cout<<"vector beta_food ";mostrar_vector(beta_food);
@@ -200,8 +220,8 @@ double herd::distancia(int i,int j){
 double herd::fitness(Pos X){
 	//Funcion del paper Z=X*e^(x^2+y^2);
 	double f;
-	if(abs(X.at(0))>512) f=100000;
-	else f=-X.at(0)*sin(sqrt(abs(X.at(0))));
+	if(fabs(X.at(0))>512) f=100000;
+	else f=-X.at(0)*sin(sqrt(fabs(X.at(0))));
 	//f=X.at(0)*exp(pow(X.at(0),2)+pow(X.at(1),2));
 	return f;
 }

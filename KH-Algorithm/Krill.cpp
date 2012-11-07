@@ -34,16 +34,45 @@ bool Krill::operator ==(Krill &B){
 	else return false;
 }
 
-void Krill::cruzar(){
-	
+/**
+ * Realiza la cruza con el krill que le viene (Fórmula 20).
+ */
+void Krill::cruzar(Krill &krillin){
+	for (int i=0; i<this->dim; ++i){
+		if (rand()/RAND_MAX < this->prob_cruza){
+			this->X[i] = krillin.get_pos()[i];
+		}
+	}
 }
-void Krill::mutar(){
+
+/**
+ * Realiza la mutación basada en DE (Fórmula 22).
+ * 
+ * Se eligen 2 individuos al azar y se calcula el vector de prueba u(t)
+ * mediante un vector objetivo X_gbes. Este vector (individuo) objetivo se
+ * puede seleccionar de varias maneras. Acá se usa la estrategia "DE/best/1/z"
+ * (el objetivo es el mejor individuo de la población actual) (pág. 244 del
+ * libro de Engelbrecht 2º Edición).
+ */
+void Krill::mutar(Krill &gbest, Krill &A, Krill &B){
+
+	double mu = 0.5; /** < (o beta según Engelbrecht) Factor de escalado entre
+                       * (0,inf). Debería ser un atributo del krill o de la
+                       * manada toda, para todos el mismo. \todo: ver eso. */
+	
+	for (int i=0; i<this->dim; ++i){
+		if (rand()/RAND_MAX < this->prob_mutar){
+			this->X[i] = gbest.get_pos()[i] + mu * (A.get_pos()[i] -
+				B.get_pos()[i]);
+		}
+	}
 	
 }
 
 void Krill::set_prob(double &K){
 	this->prob_cruza=0.2*K;
 	this->prob_mutar=0.05/K;
+	cout<<"Pc: "<<prob_cruza<<"\nPm: "<<prob_mutar<<endl; //<<<< SE HACEN INF
 }
 
 Pos &Krill::get_pos(){
