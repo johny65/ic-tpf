@@ -24,7 +24,7 @@ Krill::Krill(Pos inicial, int dni,double delta_t, double N_m, double V_f, double
 		this->F.push_back(0);
 		this->D.push_back(0);
 	}
-
+	
 	
 }
 
@@ -74,7 +74,8 @@ void Krill::mutar(Krill &gbest, Krill &A, Krill &B){
 
 void Krill::set_prob(double &K){
 	this->prob_cruza=0.2*K;
-	this->prob_mutar=0.05/K;
+	if(K==0) this->prob_mutar=0;else this->prob_mutar=0.05/K;
+	//if(this->prob_cruza>100000 || this->prob_mutar>100000) cout<< "La K es" <<K<<endl;
 	cout<<"Pc: "<<prob_cruza<<"\nPm: "<<prob_mutar<<endl; //<<<< SE HACEN INF
 }
 

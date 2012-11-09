@@ -59,8 +59,7 @@ vector<double> dif(const vector<double> &y, const vector<double> &x)
 	return r;
 }
 
-Pos prod_escalar(const Pos &x, double nu)
-{
+Pos prod_escalar(const Pos &x, double nu){
 	Pos y;
 	int n=x.size();
 	for(int i=0;i<n;++i){

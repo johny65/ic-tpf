@@ -83,4 +83,6 @@ vector< vector<double> > pesos_desde_archivo(const char * archivo);
 
 void crear_dat_krill(vector<Krill> &,vector<double> &, const char *name);
 
+void crear_dat_pos_com(Pos &food,double fit_com,const char *name);
+
 #endif

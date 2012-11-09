@@ -152,12 +152,27 @@ void crear_dat_krill(vector<Krill> &A, vector<double> &fitn, const char *name){
 		for(size_t i=0;i<X.size();i++) {  
 			ss << X[i] << " ";
 		}
-		ss << fitn.at(c)<< "\n";
+		ss << -fitn.at(c)<< "\n";
 		c++;
 		q++;
 	}
 	
-	out<<"# archivo temporal usado para graficar error en gnuplot\n";
+	out<<"# archivo temporal usado para graficar posiciones de los Krill en gnuplot\n";
+	out<<ss.str();
+	out.close();
+	
+}
+
+
+void crear_dat_pos_com(Pos &food,double fit_com,const char *name){
+	std::ostringstream ss;
+	ofstream out(name, ios::trunc);
+	for(int i=0;i<food.size();i++) { 
+		ss << food[i] << " ";
+	}
+	ss << -fit_com << "\n";
+	
+	out<<"# archivo temporal usado para graficar posicion de la comida en gnuplot\n";
 	out<<ss.str();
 	out.close();
 	
