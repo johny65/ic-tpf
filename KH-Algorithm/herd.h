@@ -18,7 +18,7 @@ private:
 	int max_it;
 	double C_best, C_food, D_diffusion; ///< Coeficientes
 	
-	double fitness(Pos X);
+	double fitness(Pos X,int id);
 	double K_best, K_worst; ///<Mejor fitness y peor fitness en cada iteracion
 	int mejor, peor; ///<indices del mejor y el peor
 	bool graf; ///<Opcion para graficar
@@ -40,7 +40,7 @@ private:
 	Pos calc_alpha_t(int);
 	double distancia(int i,int j);
 	void calcular_fitness(); ///<calcula todos los fitness 
-	
+	int id;///< id de las funciones de fitness
 	///<Para el control de graficos y datos
 	bool grafica;
 	
@@ -52,7 +52,7 @@ public:
 	void set_max_it(int);
 //	void set_sensing_d(double); ///<Setea la distancia para evaluar los vecinos
 	void set_graf(bool); ///<True: si se desea graficar 
-	void Optimizar(int ); ///<Rutina principal; resuelve el problema
+	void Optimizar(int,int ); ///<Rutina principal; resuelve el problema
 	void mostrar_posiciones();
 	void mostrar_vector(Pos &v);
 	void set_grafica(bool);

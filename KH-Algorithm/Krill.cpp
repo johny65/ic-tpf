@@ -76,7 +76,7 @@ void Krill::set_prob(double &K){
 	this->prob_cruza=0.2*K;
 	if(K==0) this->prob_mutar=0;else this->prob_mutar=0.05/K;
 	//if(this->prob_cruza>100000 || this->prob_mutar>100000) cout<< "La K es" <<K<<endl;
-	cout<<"Pc: "<<prob_cruza<<"\nPm: "<<prob_mutar<<endl; //<<<< SE HACEN INF
+	//cout<<"Pc: "<<prob_cruza<<"\nPm: "<<prob_mutar<<endl; //<<<< SE HACEN INF
 }
 
 Pos &Krill::get_pos(){
