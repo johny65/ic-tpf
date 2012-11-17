@@ -3,7 +3,6 @@
 #include <vector>
 #include <cstdlib>
 #include "Krill.h"
-#include "herd.h"
 #include "func.h"
 
 #include "GNUplot.h"
@@ -17,8 +16,9 @@ private:
 	int num_krill; ///<Numero de Krill en la manada
 	int max_it;
 	double C_best, C_food, D_diffusion; ///< Coeficientes
+	double w; ///< Cálculo de los w para que disminuyan con el tiempo
 	
-	double fitness(Pos X);
+	double fitness(Pos X, int id);
 	double K_best, K_worst; ///<Mejor fitness y peor fitness en cada iteracion
 	int mejor, peor; ///<indices del mejor y el peor
 	bool graf; ///<Opcion para graficar
@@ -28,6 +28,8 @@ private:
 	GNUplot plotter;
 	
 	///<Funciones
+	int id;
+	vector< pair<double, double> > rango;
 	void calc_pos_food();
 	vector<int> vecinos(Krill &A);
 	void calc_best_peor(int &, int &,double &, double &); ///<devuelve el indice del mejor y peor individuo dentro de la Manada
@@ -39,7 +41,7 @@ private:
 	Pos calc_alpha_l(int);
 	Pos calc_alpha_t(int);
 	double distancia(int i,int j);
-	void calcular_fitness(); ///<calcula todos los fitness 
+	bool condicion_corte(double val);
 	
 	///<Para el control de graficos y datos
 	bool grafica;
@@ -52,11 +54,12 @@ public:
 	void set_max_it(int);
 //	void set_sensing_d(double); ///<Setea la distancia para evaluar los vecinos
 	void set_graf(bool); ///<True: si se desea graficar 
-	void Optimizar(int ); ///<Rutina principal; resuelve el problema
+	void Optimizar(int, int); ///<Rutina principal; resuelve el problema
 	void mostrar_posiciones();
 	void mostrar_vector(Pos &v);
 	void set_grafica(bool);
 	void graficar(bool); ///<rutina de graficacion
+	vector< pair<double, double> > &get_rangos();
 };
 
 #endif

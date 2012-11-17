@@ -24,15 +24,9 @@ long_line_behaviour=1
 long_line_column=79
 
 [files]
-current_page=7
-FILE_NAME_0=1024;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2Fherd.cpp;0;4
-FILE_NAME_1=463;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2Fherd.h;0;4
-FILE_NAME_2=835;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2FKrill.h;0;4
-FILE_NAME_3=79;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2FKrill.cpp;0;4
-FILE_NAME_4=1816;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2Ffunc.cpp;0;4
-FILE_NAME_5=8214;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDescargas%2FKH-Algorithm%2Fherd.cpp;0;4
-FILE_NAME_6=54;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDescargas%2FKH-Algorithm%2Fmain.cpp;0;4
-FILE_NAME_7=3199;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDescargas%2FKH-Algorithm%2Futils.cpp;0;4
+current_page=1
+FILE_NAME_0=6639;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2Fherd.cpp;0;4
+FILE_NAME_1=1607;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2Fmain.cpp;0;4
 
 [VTE]
 last_dir=/home/johny/Documentos/tpf-ic/KH-Algorithm

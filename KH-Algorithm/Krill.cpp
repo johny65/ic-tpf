@@ -4,12 +4,12 @@
 #include <iostream>
 using namespace std;
 
-Krill::Krill(Pos inicial, int dni,double delta_t, double N_m, double V_f, double D_m) {
+Krill::Krill(Rango &ranfp, Pos inicial, int dni,double delta_t, double N_m, double V_f, double D_m) {
+	//this->manada = manada;
+	this->rango = rango;
 	this->X=inicial;
 	this->dim=this->X.size();
 	this->id=dni;
-	this->wn=(rand()%100)/100.0;
-	this->wf=(rand()%100)/100.0;
 	this->dt=delta_t;
 	this->N_max=N_m;
 	this->V_foraging=V_f;
@@ -72,11 +72,17 @@ void Krill::mutar(Krill &gbest, Krill &A, Krill &B){
 	
 }
 
-void Krill::set_prob(double &K){
+
+/**
+ * Setea las probabilidades de cruza y mutación y también los w.
+ */
+void Krill::set_prob(double &K, double w){
 	this->prob_cruza=0.2*K;
 	if(K==0) this->prob_mutar=0;else this->prob_mutar=0.05/K;
+	this->wn = w;
+	this->wf = w;
 	//if(this->prob_cruza>100000 || this->prob_mutar>100000) cout<< "La K es" <<K<<endl;
-	cout<<"Pc: "<<prob_cruza<<"\nPm: "<<prob_mutar<<endl; //<<<< SE HACEN INF
+	//cout<<"Pc: "<<prob_cruza<<"\nPm: "<<prob_mutar<<endl; //<<<< SE HACEN INF
 }
 
 Pos &Krill::get_pos(){
@@ -108,14 +114,26 @@ void Krill::actualizar_pos(Pos &alpha_i,Pos &Beta_i_food, double &D_coef){
 
 	this->N=sum(prod_escalar(alpha_i,this->N_max),temp);
 
-	
 	//Pos Beta_i=sum(this->Beta_best,Beta_i_food);
 	
 	
 	this->F=sum(prod_escalar(sum(this->Beta_best,Beta_i_food),this->V_foraging),prod_escalar(this->F,this->wf));
 
 	//Actualizo la posicion
-	this->X=sum(this->X,prod_escalar(sum(this->N,sum(this->F,this->D)),this->dt));
+	Pos nueva = sum(this->X,prod_escalar(sum(this->N,sum(this->F,this->D)),this->dt));
+	bool act = true;
+	Rango &rango = this->rango;
+	for (size_t i=0; i<rango.size(); ++i){
+		if (this->X.at(i) < rango[i].first || this->X.at(i) > rango[i].second){
+			act = false;
+			break;
+		}
+	}
+	
+	if (act)
+		this->X = nueva;
+		
+
 	//mostrar(this->X);
 }
 

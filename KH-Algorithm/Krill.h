@@ -1,5 +1,6 @@
 #ifndef KRILL_H
 #define KRILL_H
+
 #include <vector>
 #include <cmath>
 #include <cstdlib>
@@ -7,6 +8,9 @@
 using namespace std;
 
 typedef vector<double> Pos;
+typedef vector< pair<double, double> > Rango;
+
+//class herd;
 
 class Krill {
 private:
@@ -32,11 +36,12 @@ private:
 	double N_max; ///< Maxima velocidad para el movimiento inducido
 	double V_foraging; ///< Maxima velocidad para el movimiento forrajero
 	double D_max; ///< Maxima velocidad para el movimiento aletorio (debe ser un num entre [0.002,0.010])
-	
+	//herd *manada;
+	Rango rango;
 	
 	
 public:
-	Krill(Pos inicial, int, double,double,double,double);
+	Krill(Rango &rango, Pos inicial, int, double,double,double,double);
 	~Krill();
 //	bool operator ==(Krill &B);
 	void actualizar_pos(Pos &alpha_i,Pos &Beta_i_food, double &D_coef); ///< alpha y beta vectores directore. D_coef=D_max*(1-I/I_max)
@@ -49,7 +54,7 @@ public:
 	int get_id();
 	void set_dist_sensing(double);
 	void set_beta_best(Pos &);
-	void set_prob(double &K);///<Setea las probabilidades de cruza y mutacion que tiene el Krill
+	void set_prob(double &K, double w);///<Setea las probabilidades de cruza y mutacion que tiene el Krill
 	
 };
 

@@ -1,19 +1,19 @@
-#include "herd.h"
 #include <limits>
-
+#include <algorithm>
+#include <string>
 #include <iostream>
-
 #include <iomanip>
 #include "utils.h"
 #include "wait.h"
-#include <string>
+#include "herd.h"
+
 using namespace std;
 
-herd::herd(int cant_k, int dimension, vector<pair<double,double> > rango,double delta_t,double N,double V,double D): grafica(true){
+herd::herd(int cant_k, int dimension, vector<pair<double,double> > rango,double delta_t,double N,double V,double D): w(0.9), grafica(true) {
 	//Inicializo la semilla
 	srand(time(NULL) + getpid());
 	
-	
+	this->rango = rango;
 	this->dim=dimension;
 	this->num_krill=cant_k;
 	
@@ -31,7 +31,7 @@ herd::herd(int cant_k, int dimension, vector<pair<double,double> > rango,double 
 			int a=(int) rango[j].second-rango[j].first;
 			Ki.push_back((rango[j].first+rand()%a)); //genero un numero aletorio entre las coordenadas limite del problema
 		}
-		Krill K(Ki,i,delta_t,N,V,D);
+		Krill K(rango, Ki, i, delta_t, N, V, D);
 		this->M.push_back(K);
 		this->func_obj.push_back(0); ///<inicializo el vector que guardara los fitness;
 	}
@@ -62,11 +62,17 @@ void herd::set_graf(bool a){
 	this->graf=a;
 } 
 
-void herd::Optimizar(int m){
+void herd::Optimizar(int m, int id){
 	/**
 	Rutina principal
 	*/
+
+	/* guarda los mejores fitness: */
+	vector<double> v_fitness_mejor;
+	/* -----------------------------*/
+	
 	this->max_it=m;
+	this->id = id;
 	int c=0; //cuenta el numero de iteraciones
 	Pos alpha_local, alpha_target, alpha_total; //Para el movimiento inducido por otros individuos
 	//Para el movimiento forrajero 
@@ -78,8 +84,14 @@ void herd::Optimizar(int m){
 		
 		//Calculo todos los fitness
 		for(int i=0;i<this->num_krill;i++) { 
-			this->func_obj[i]=fitness(this->M[i].get_pos());
+			this->func_obj[i]=fitness(this->M[i].get_pos(), id);
 			//cout<<func_obj[i]<<endl;
+		}
+		v_fitness_mejor.push_back(*max_element(this->func_obj.begin(), this->func_obj.end()));
+		if (condicion_corte(v_fitness_mejor.back())){
+			cout<<"Cortó en la iteración "<<c<<" - Solución: "<<
+				v_fitness_mejor.back()<<endl;
+			break;
 		}
 		
 		//Calculo las distancia de sensado de cada krill;
@@ -94,12 +106,12 @@ void herd::Optimizar(int m){
 		calc_best_peor(this->mejor,this->peor,this->K_best,this->K_worst); 
 		
 		
-		cout<<"Posicion de la comida ";	mostrar_vector(this->food);
-		mostrar_posiciones(); //muestro las posiciones de los Krill
+		//cout<<"Posicion de la comida ";	mostrar_vector(this->food);
+		//mostrar_posiciones(); //muestro las posiciones de los Krill
 //		cout<<"muestro el vector de fitness "<<endl; mostrar_vector(this->func_obj); 
 		
-		cout<<"el mejor esta en la posicion "<<this->mejor<<" su fitness es "<<this->K_best<<endl;
-		cout<<"el peor esta en la posicion "<<this->peor<<" su fitness es "<<this->K_worst<<endl<<endl;
+		//cout<<"el mejor esta en la posicion "<<this->mejor<<" su fitness es "<<this->K_best<<endl;
+		//cout<<"el peor esta en la posicion "<<this->peor<<" su fitness es "<<this->K_worst<<endl<<endl;
 		
 		if(this->grafica){
 			graficar(true);
@@ -128,7 +140,7 @@ void herd::Optimizar(int m){
 			//-c) calculo probabilidades de cruza y mutacion
 			K_CM=(func_obj[i]-this->K_best)/(this->K_worst-this->K_best); //K de la ecuacion (21) y (23)
 			if(K_CM<0.0001) K_CM=0;
-			this->M[i].set_prob(K_CM);
+			this->M[i].set_prob(K_CM, this->w);
 			
 			//-d) cruzo y muto
 			/*
@@ -154,34 +166,68 @@ void herd::Optimizar(int m){
 			this->M[i].mutar(this->M[this->mejor], this->M[r], this->M[r2]);
 
 			
-			cout<<"vector alpha_total "; mostrar_vector(alpha_total);
-			cout<<"vector beta_food ";mostrar_vector(beta_food);
+			//cout<<"vector alpha_total "; mostrar_vector(alpha_total);
+			//cout<<"vector beta_food ";mostrar_vector(beta_food);
 			///<to do: implementar cruzar y mutar
 			//e)-Actualizo la posicion del i-esimo Krill
 			this->M[i].actualizar_pos(alpha_total,beta_food,this->D_diffusion);
-			cout<<endl;
+			//cout<<endl;
 		}
 		
 		
 		c+=1; //siguiente iteracion
 	}
-	mostrar_posiciones();
+
+	for(int i=0;i<this->num_krill;i++) { 
+		this->func_obj[i]=fitness(this->M[i].get_pos(), id);
+	}	
+	//mostrar_posiciones();
 	calc_best_peor(this->mejor,this->peor,this->K_best,this->K_worst);
 	cout<<"el mejor esta en la posicion "<<this->mejor<<" su fitness es "<<this->K_best<<endl; 
-	
+
+	crear_dat_vector(v_fitness_mejor, "krill_run.dat");
 	
 }
 
 void herd::calcular_coef(int iteracion){
 	double iter=iteracion*1.0/this->max_it;
+
+	//los w (omega, inercia) disminuyen linealmente de 0.9 a 0.1:
+	this->w = 0.8 * (this->max_it - iteracion)/this->max_it + 0.1;
+
+	//los w (omega, inercia) disminuyen de forma no lineal, w(0) = 0.9
+	//this->w = (this->w - 0.4)*(this->max_it - iteracion) / (this->max_it + 0.4);
+	
 	this->C_best=2*(((rand()%100)/100.0)+iter);
 	this->C_food=2*(1-iter);
 	this->D_diffusion=0.01*(1-iter);
 }
 
-void herd::calcular_fitness(){
 
+/**
+ * Corta el algoritmo según si se aproxima a la solución (depende de cada
+ * función).
+ */
+bool herd::condicion_corte(double val)
+{
+	switch (this->id) {
+		case 1: {
+		}
+		case 2: {
+		}
+		case 3: {
+		}
+		case 4: {
+			return false;
+		}
+		case 5: { //Ackley: mínimo 0.0
+			return (fabs(val) < 1e-3);
+		}
+	}
+	return false;
 }
+
+
 Pos herd::calc_alpha_l(int i){
 	/**@param i: indice del Krill del cual se calcula el alpha_local*/
 	Pos alfa;
@@ -233,31 +279,71 @@ double herd::distancia(int i,int j){
 
 
 
-double herd::fitness(Pos X){
+double herd::fitness(Pos X,int id){
+	double f=0;
 	
-	//double f;
-	//Funcion  f=-x*sin(|x|);
-//	if(abs(X.at(0))>512) {f=this->K_worst;}
-//	else {f=(-X.at(0)*sin(sqrt(abs(X.at(0)))));}
-	
-	
-//	//Funcion del paper f=x*e^(x^2+y^2);
-//	if(abs(X[0])>2 || abs(X[1])>2) f=0;
-//	else f=(X.at(0)*exp(-pow(X.at(0),2)-pow(X.at(1),2)));
+switch(id){
+	case 1: {
+		if(abs(X.at(0))>512) {f=this->K_worst;}
+		else {
+			f=(-X.at(0)*sin(sqrt(fabs(X.at(0)))));
+		}
+		break;}
+	case 2: {
+		//if(abs(X[0])>2 || abs(X[1])>2) f=0;
+		//else 
+			f=(X.at(0)*exp(-pow(X.at(0),2)-pow(X.at(1),2)));
+		break;}
+	case 3:{
+		double &x = X.at(0), &y = X.at(1);
+		double xx = x*x, yy = y*y, xy = xx + yy;
+		double s = sin(50 * pow(xy, 0.1));
+		f=pow(xy, 0.25) * (s*s + 1);
+		break;}
+	case 4:{
+		//Funcion Kowalik
+		if(fabs(X.at(0)) > 5|| fabs(X.at(1)) > 5 || fabs(X.at(2)) > 5 || fabs(X.at(3))>5) f=-500;
+		else{
+			double a[]={0.1957,0.1947,0.1735,0.16,0.0844,0.0627,0.0456,0.0342,0.0323,0.0235,0.0246};
+			double b[]={0.25,0.5,1,2,4,6,8,10,12,14,16};
+			for(size_t i=0;i<this->rango.size();i++) { 
+				if(X.at(i)<this->rango[i].first or X.at(i)>this->rango[i].second){
+					//cout<<"Fuera de rango "<<endl; cin.get(); mostrar_vector(X);
+				} 
+			}
+			for(int i=0;i<11;i++) { 
+				double d=(1+X.at(2)*b[i]+X.at(3)*b[i]*b[i]);
+				if(d==0){ cout<<"division por 0"; mostrar_vector(X); cin.get(); f=0; /*numeric_limits<double>::max(); cin.get();*/}
+				else f+=pow((a[i]-((X.at(0)*(1+X.at(1)*b[i]))/d)),2);
+				//cout<<f<<endl;
+			}
+		}
+		break;
+	}
+	case 5: { //Ackley
+		int n = 20;
+		double s1 = 0.0, s2 = 0.0;
+		for (int i=0; i<n; ++i){
+			s1 += X.at(i)*X.at(i);
+			s2 += cos(2*M_PI*X.at(i));
+		}
+		double r = -20*exp(-0.2*sqrt(s1/n))-exp(s2/n)+20+exp(1);
+		//if (r != r) {
+		/*	for (int i=0; i<n; i++){
+				cout<<val[i]<<endl;
+			}*/
+			//cout<<"r: "<<r<<endl;
+			//cin.get();
 
-//	//Funcion 
-	
-//	f=pow(pow(X[0],2)+pow(X[1],2),0.25)*(pow(sin(50*(pow(pow(X[0],2)+pow(X[1],2),0.1))),2)+1);
-	
-//	//Funcion
-//	f=X[0] + 5*sin(3*X[0]) + 8*cos(5*X[0]);
-	
-	double &x = X.at(0), &y = X.at(1);
-	double xx = x*x, yy = y*y, xy = xx + yy;
-	double s = sin(50 * pow(xy, 0.1));
-	return -pow(xy, 0.25) * (s*s + 1);
-	
-	//return f;
+		//}
+		//return r;
+		f = r;
+	}
+}
+
+	if(f!=f ) {/*cout<<"valor de f "<<f<<" valor que voy a retornar "<<numeric_limits<double>::max()<<endl;*/ return numeric_limits<double>::max();	}
+	else return -f;
+
 }
 
 void herd::calc_pos_food(){
@@ -335,8 +421,8 @@ void herd::calc_Xs_Ks_vector(int &i, Pos &j, Pos &X, double &K){
 //	mostrar_vector(X);
 	//cout<<"diferencia de fitness "<<fitness(i)-fitness(j)<<endl;
 	
-	K=(func_obj.at(i)-fitness(j))/(this->K_worst - this->K_best);
-	cout<<K<<endl;
+	K=(func_obj.at(i)-fitness(j, this->id))/(this->K_worst - this->K_best);
+	//cout<<K<<endl;
 	
 //	cout<<"termine el calculo"<<endl;
 }
@@ -348,7 +434,7 @@ void herd::mostrar_posiciones(){
 		for(size_t j=0;j<temp->size();j++) { 
 			cout<<setw(5)<<temp->at(j)<<", "<<setw(5);
 		}
-		cout<<"fitness "<<this->func_obj.at(i)<<"  "<<fitness(this->M[i].get_pos())<<endl;
+		cout<<"fitness "<<this->func_obj.at(i)<<endl;//<<"  "<<fitness(this->M[i].get_pos(), this->id)<<endl;
 	}
 	cout<<endl<<endl<<endl;
 }
@@ -373,7 +459,7 @@ void herd::graficar(bool graf_krill){
 		if(graf_krill){
 			//creo el csv con las posciones de todos los Krill
 			crear_dat_krill(this->M,this->func_obj,"Posicion");
-			crear_dat_pos_com(this->food, fitness(this->food),"Posicion_comida");
+			crear_dat_pos_com(this->food, fitness(this->food, this->id),"Posicion_comida");
 			ss<<"replot \"Posicion\" with points \n";
 			ss<<"replot \"Posicion_comida\" with points \n";
 	
@@ -391,13 +477,17 @@ void herd::graficar(bool graf_krill){
 		if(graf_krill){
 			//creo el csv con las posciones de todos los Krill
 			crear_dat_krill(this->M,this->func_obj,"Posicion");
-			crear_dat_pos_com(this->food, fitness(this->food),"Posicion_comida");
+			crear_dat_pos_com(this->food, fitness(this->food, this->id),"Posicion_comida");
 			ss<<"replot \"Posicion\" with points \n";
 			ss<<"replot \"Posicion_comida\" with points \n";
 			
 		}
 	}
 	plotter(ss.str());
-	cin.get();
+	//cin.get();
 }
 
+vector< pair<double, double> > &herd::get_rangos()
+{
+	return this->rango;
+}

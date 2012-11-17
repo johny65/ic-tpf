@@ -1,27 +1,74 @@
-#include<iostream>
+#include <iostream>
 #include <vector>
 #include "herd.h"
+
 using namespace std;
 
-int main (int argc, char *argv[]) {
+void Semilla(int cant_k,double Ct ,double N,double V,double D, int id, int cant_it){
+	/**
+	*@param cant_k: cantidad de individuos;
+	*@param rango: rango de busqueda de la solucion (rango.size() = dimension del problema)
+	*@param Ct: constante para calcular el delta_t
+	*@param N: parametro para el movimiento inducido por otros individuos (N_max)
+	*@param V: parametro para el movimiento forrajero 
+	*@param D: parametro para difusion aletoria.
+	*@param id: id de la funcion a evaluar.
+	*@param cant_it: cantidad maxima de iteraciones.
+	*/	
+
 	pair<double,double> k;
-	k.first=-100; k.second=100;
 	vector<pair<double,double> > r;
-	r.push_back(k); r.push_back(k);
-	herd Manada(100,2,r,0.01,0.02,0.01,0.005);
-	Manada.Optimizar(100);
+	switch(id){
+		case 1:{
+			k.first=-512;
+			k.second=512;
+			r.push_back(k);
+			break;
+		}
+		case 2:{
+			k.first=0;
+			k.second=20;
+			r.push_back(k);
+			break;
+		}
+		case 3:{
+			k.first=-100;
+			k.second=100;
+			r.push_back(k); r.push_back(k);
+			break;
+		}
+		case 4:{
+			k.first=-5;
+			k.second=5;
+			r.push_back(k); r.push_back(k); r.push_back(k); r.push_back(k);
+			break;
+		}
+		case 5: {
+			k.first = -32; k.second = 32;
+			for (int i=0; i<20; ++i){
+				r.push_back(k);
+			}
+		}
+	}
+	int dimension=r.size();
+
+	//calcular delta_t:
+	double dt = 0.0;
+	for (int i=0; i<dimension; ++i){
+		dt += r[i].second - r[i].first;
+	}
+	dt *= Ct;
+	//cout<<"dt: "<<dt<<endl; cin.get();
+	//double dt = Ct;
 	
+	herd Manada(cant_k, dimension, r, dt, N, V, D);
+	Manada.Optimizar(cant_it, id);
+}
+
+int main (int argc, char *argv[]) {
 	
-	//Para funcion 1d
-//	pair<double,double> k;
-//	k.first=-512; k.second=512;
-//	vector<pair<double,double> > r;
-//	r.push_back(k); 
-//	herd Manada(15,1,r,0.5,0.3,0.01,0.01);
-//	Manada.Optimizar(150);
-	
-	
-	
+	//int cant_k, double dt, double N,double V,double D, int id, int cant_it
+	Semilla(15, 0.5, 0.02,0.01,0.005,5, 750);
 	
 	return 0;
 }
