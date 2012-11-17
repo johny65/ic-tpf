@@ -68,7 +68,7 @@ void Semilla(int cant_k,double Ct ,double N,double V,double D, int id, int cant_
 int main (int argc, char *argv[]) {
 	
 	//int cant_k, double dt, double N,double V,double D, int id, int cant_it
-	Semilla(15, 0.5, 0.02,0.01,0.005,5, 750);
+	Semilla(15, 0.5, 0.02,0.01,0.005,5, 1000);
 	
 	return 0;
 }
