@@ -36,7 +36,7 @@ private:
 	double N_max; ///< Maxima velocidad para el movimiento inducido
 	double V_foraging; ///< Maxima velocidad para el movimiento forrajero
 	double D_max; ///< Maxima velocidad para el movimiento aletorio (debe ser un num entre [0.002,0.010])
-	//herd *manada;
+
 	Rango rango;
 	
 	

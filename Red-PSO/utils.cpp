@@ -87,7 +87,7 @@ void crear_dat_vector(vector<double> &v, const char *name)
 		ss << (*q) << "\n";
 		q++;
 	}
-	out<<"# archivo temporal usado para graficar error en gnuplot\n";
+	//out<<"# archivo temporal usado para graficar error en gnuplot\n";
 	out<<ss.str();
 	out.close();
 	

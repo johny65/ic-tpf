@@ -48,6 +48,17 @@ void Semilla(int cant_k,double Ct ,double N,double V,double D, int id, int cant_
 			for (int i=0; i<20; ++i){
 				r.push_back(k);
 			}
+			break;
+		}
+		case 6: { //vessel
+			//r.push_back(make_pair(0.0, 256.0));
+			//r.push_back(make_pair(0.0, 256.0));
+			//r.push_back(make_pair(0.0, 256.0));
+			//r.push_back(make_pair(0.0, 256.0));
+			r.push_back(make_pair(0.0625, 6.1875));
+			r.push_back(make_pair(0.0625, 6.1875));
+			r.push_back(make_pair(10, 200));
+			r.push_back(make_pair(10, 200));
 		}
 	}
 	int dimension=r.size();
@@ -58,17 +69,18 @@ void Semilla(int cant_k,double Ct ,double N,double V,double D, int id, int cant_
 		dt += r[i].second - r[i].first;
 	}
 	dt *= Ct;
+	//dt=1;
 	//cout<<"dt: "<<dt<<endl; cin.get();
 	//double dt = Ct;
 	
-	herd Manada(cant_k, dimension, r, dt, N, V, D);
+	herd Manada(cant_k, dimension, r, dt, N, V, D, id);
 	Manada.Optimizar(cant_it, id);
 }
 
 int main (int argc, char *argv[]) {
 	
 	//int cant_k, double dt, double N,double V,double D, int id, int cant_it
-	Semilla(15, 0.5, 0.02,0.01,0.005,5, 1000);
+	Semilla(250, 0.5, 0.02,0.01,0.005, 6, 1000);
 	
 	return 0;
 }

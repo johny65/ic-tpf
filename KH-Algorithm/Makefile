@@ -1,7 +1,7 @@
 GPP=g++
 GCC=gcc
-FLAGS=  -g2 -Wall -O0  -D_DEBUG 
-LIBS=  
+FLAGS=  -g2 -Wall -O0  -D_DEBUG -fopenmp
+LIBS=  -fopenmp
 OBJS=Debug/main.o Debug/Krill.o Debug/herd.o Debug/func.o Debug/utils.o 
 
 all: Debug Debug/krill.bin

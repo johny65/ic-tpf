@@ -11,7 +11,7 @@
 
 
 using namespace std;
-
+extern int cant_eval_func;
 
 /**
  * @brief Constructor.
@@ -21,7 +21,7 @@ using namespace std;
 GA::GA(int n, int l) : itmax(100), pc(0.9), pm(0.1), elite(0)
 {
     srand(time(NULL) + getpid());
-    inicializar_poblacion(n, l);
+    //inicializar_poblacion(n, l);
     this->tol = numeric_limits<double>::infinity();
 }
 
@@ -43,6 +43,8 @@ Cromosoma GA::Ejecutar()
 {
     int it = 1;
     int r1, r2;
+    Individuo n1, n2;
+    
     while (it <= this->itmax){
         
         Poblacion nueva = seleccionar(this->poblacion);
@@ -58,14 +60,21 @@ Cromosoma GA::Ejecutar()
         for (int i=0; i<this->N; ++i){
             r1 = rand()%this->N; r2 = rand()%this->N;
             if (rand()/RAND_MAX <= this->pc){
-                cruzar(nueva[r1].cromosoma,
-                    nueva[r2].cromosoma);
+                n1 = nueva[r1];
+                n2 = nueva[r2];
+                cruzar(n1.cromosoma, n2.cromosoma);
+                if (!isinf(fitness_func(n1))) nueva[r1] = n1;
+                if (!isinf(fitness_func(n2))) nueva[r2] = n2;
             }
             if (rand()/RAND_MAX <= this->pm){
-                mutar(nueva[r1].cromosoma);
+                n1 = nueva[r1];
+                mutar(n1.cromosoma);
+                if (!isinf(fitness_func(n1))) nueva[r1] = n1;
             }
             if (rand()/RAND_MAX <= this->pm){    
-                mutar(nueva[r2].cromosoma);
+                n2 = nueva[r2];
+                mutar(n2.cromosoma);
+                if (!isinf(fitness_func(n2))) nueva[r2] = n2;
             }
         }
 
@@ -99,7 +108,9 @@ void GA::inicializar_poblacion(int n, int l)
     int r, i, j;
     this->poblacion = Poblacion(n);
     Gen *s;
-    for (i=0; i<n; ++i){
+    //for (i=0; i<n; ++i){
+    i=0;
+    while (i<n){
         s = new Gen[l+1];
         for (j=0; j<l; ++j){
             r = rand();
@@ -108,6 +119,10 @@ void GA::inicializar_poblacion(int n, int l)
         s[l] = '\0';
         this->poblacion[i].cromosoma = s;
         delete[] s;
+
+        //ver si es válido:
+        if (!isinf(fitness_func(this->poblacion[i])))
+            i++;
     }
 }
 
@@ -228,10 +243,11 @@ void GA::setToleranciaCorte(double d)
  */
 void GA::graficar()
 {
+    f_mejor.push_back(cant_eval_func);
     crear_dat_vector(f_mejor, "fmejor.dat");
-    crear_dat_vector(f_peor, "fpeor.dat");
-    crear_dat_vector(f_promedio, "fprom.dat");
-    plotter("plot \"fmejor.dat\" with lines");
-    plotter("replot \"fpeor.dat\" with lines");
-    plotter("replot \"fprom.dat\" with lines");
+    //crear_dat_vector(f_peor, "fpeor.dat");
+    //crear_dat_vector(f_promedio, "fprom.dat");
+    //plotter("plot \"fmejor.dat\" with lines");
+    //plotter("replot \"fpeor.dat\" with lines");
+    //plotter("replot \"fprom.dat\" with lines");
 }

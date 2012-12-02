@@ -1,0 +1,52 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{#1}
+\def\UrlFont{\rmfamily}
+\providecommand{\newblock}{\relax}
+\providecommand{\bibinfo}[2]{#2}
+\providecommand\BIBentrySTDinterwordspacing{\spaceskip=0pt\relax}
+\providecommand\BIBentryALTinterwordstretchfactor{4}
+\providecommand\BIBentryALTinterwordspacing{\spaceskip=\fontdimen2\font plus
+\BIBentryALTinterwordstretchfactor\fontdimen3\font minus
+  \fontdimen4\font\relax}
+\providecommand\BIBforeignlanguage[2]{{%
+\expandafter\ifx\csname l@#1\endcsname\relax
+\typeout{** WARNING: IEEEtran.bst: No hyphenation pattern has been}%
+\typeout{** loaded for the language `#1'. Using the pattern for}%
+\typeout{** the default language instead.}%
+\else
+\language=\csname l@#1\endcsname
+\fi
+#2}}
+
+
+\bibitem{Krill}
+Amir Hossein Gandomi, Amir Hossein Alavi, ``Krill herd: A new bio-inspired optimization algorithm'', \emph{Communications in Nonlinear Science and Numerical Simulation}, Volume 17, Issue 12, December 2012, Pages 4831-4845, ISSN 1007-5704, 10.1016/j.cnsns.2012.05.010.
+
+
+\bibitem{Bat}
+Gandomi A.H., Yang X., Alavi A.H., Talatahari S. ``Bat algorithm for constrained optimization tasks''.
+\emph{Neural Computing & Applications}. (20 July 2012), pp. 1-17.
+
+
+\bibitem{Nat}
+Zang H, Zhang S, Hapeshi K. ``A review of nature-inspired algorithms''. \emph{J Bionic Eng} 2010;7:S232-7.
+
+
+\bibitem{Tipos}
+Tang WJ, Wu QH. ``Biologically inspired optimization: a review''. \emph{Trans Inst Meas Control} 2009;
+31:495-515.
+
+
+\bibitem{Lagrangian}
+Hofmann EE, Haskell AGE, Klinck JM, Lascara CM. ``Lagrangian modelling studies of Antarctic krill (Euphasia superba) swarm formation''. ICES J Mar Sci 2004; 61:617-31.
+
+
+\bibitem{Engelbrecht}
+Andries P. Engelbrecht. ``Computational Intelligence: An Introduction''.
+\relax Second Edition, 2007.
+
+\bibitem{Clouds}
+Nayer Wanas. ``Feature Based Architecture for Decision Fusion''. Tesis, University of Waterloo, 2003.
+
+
+\end{thebibliography}

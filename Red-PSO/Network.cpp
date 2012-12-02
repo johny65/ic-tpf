@@ -244,9 +244,9 @@ double Network::probar (const char * name) {
 		}
 	}
 	
-	cout<<"Número de aciertos: "<<aciertos<<"/"<<this->datos.size()<<endl;
+//	cout<<"Número de aciertos: "<<aciertos<<"/"<<this->datos.size()<<endl;
 	double porc = aciertos*100.0/this->datos.size();
-	cout<<"% de aciertos: "<<porc<<"%"<<endl;
+//	cout<<"% de aciertos: "<<porc<<"%"<<endl;
 	
 	//generar un archivo .txt para graficar los puntos con la clasificacion obtenida
 	if (this->couts){

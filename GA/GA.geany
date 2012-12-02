@@ -24,15 +24,15 @@ long_line_behaviour=1
 long_line_column=79
 
 [files]
-current_page=0
-FILE_NAME_0=471;C++;0;16;0;1;0;%2Fhome%2Fjohny%2FDocumentos%2Fic%2Ftp4%2Fejercicio1%2Fmain.cpp;0;4
-FILE_NAME_1=2139;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Fic%2Ftp4%2Fejercicio1%2Ffunc.cpp;0;4
-FILE_NAME_2=356;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Fic%2Ftp4%2Fejercicio1%2Ffunc.h;0;4
-FILE_NAME_3=490;C++;0;16;0;1;0;%2Fhome%2Fjohny%2FDocumentos%2Fic%2Ftp4%2Fejercicio1%2Fgenetic.h;0;4
-FILE_NAME_4=2065;C++;0;16;0;1;0;%2Fhome%2Fjohny%2FDocumentos%2Fic%2Ftp4%2Fejercicio1%2Fgenetic.cpp;0;4
+current_page=4
+FILE_NAME_0=1969;C++;0;16;0;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FGA%2Fgenetic.cpp;0;4
+FILE_NAME_1=2873;C++;0;16;0;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FGA%2Ffunc.cpp;0;4
+FILE_NAME_2=1084;C++;0;16;0;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FGA%2Fgenetic.h;0;4
+FILE_NAME_3=0;C++;0;16;0;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2Fpso%2Fpso.cpp;0;4
+FILE_NAME_4=4758;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FGA%2Fmain.cpp;0;4
 
 [VTE]
-last_dir=/home/johny/Documentos/ic/tp4/ejercicio1/bin
+last_dir=/home/johny/Documentos/tpf-ic/informe_tp_final/matlab
 
 [gproject]
 source_patterns=*.c;*.C;*.cpp;*.cxx;*.c++;*.cc;

@@ -20,7 +20,7 @@ cursor=392
 open=true
 [source]
 path=Network.cpp
-cursor=2066
+cursor=263
 open=true
 [source]
 path=Perceptron.cpp
@@ -28,11 +28,11 @@ cursor=174
 open=true
 [source]
 path=pso.cpp
-cursor=488
+cursor=3740
 open=true
 [source]
 path=utils.cpp
-cursor=2430
+cursor=1645
 open=true
 [header]
 path=func.h

@@ -53,7 +53,6 @@ private:
     double pc, pm; ///< Probabilidad de cruza y mutación
     int elite; ///< Cantidad de individuos que pasan directamente
 
-    void inicializar_poblacion(int n, int l);
     void evaluar_fitness_poblacion();
     void cruzar(Cromosoma &a, Cromosoma &b);
     void mutar(Cromosoma &a);
@@ -66,6 +65,7 @@ private:
     void graficar();
     
 public:
+    void inicializar_poblacion(int n, int l);
     GA(int n, int l);
     void setFuncionFitness(double (*f)(Individuo&));
     void setMaximasIteraciones(int it);

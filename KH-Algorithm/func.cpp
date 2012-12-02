@@ -4,11 +4,49 @@
 #include <cstdlib>
 #include <iostream>
 #include <cassert>
+#include <limits>
 #include <set>
 #include "func.h"
 
 
 using namespace std;
+
+extern int cant_func_val;
+
+double fitness_vessel(Pos &X)
+{
+	cant_func_val++;
+	
+	double &x1 = X.at(0);
+	double &x2 = X.at(1);
+	double &x3 = X.at(2);
+	double &x4 = X.at(3);
+
+	double fitnessmalo = numeric_limits<double>::infinity();
+
+	if (x1 < 0.0625 || x1 > 6.1875 || x2 < 0.0625 || x2 > 6.1875)
+		return fitnessmalo;
+		
+	if (x3 < 10 || x3 > 200 || x4 < 10 || x4 > 200)
+		return fitnessmalo;
+		
+	if (-x1 + 0.0193*x3 > 0)
+		return fitnessmalo;
+
+	if (-x2 + 0.00954*x3 > 0)
+		return fitnessmalo;
+
+	if (-M_PI*x3*x3*x4 - (4.0/3.0)*M_PI*pow(x3, 3) + 1296000 > 0)
+		return fitnessmalo;
+
+	if (x4 - 240 > 0)
+		return fitnessmalo;
+
+	double f = 0.6224*x1*x3*x4 + 1.7781*x2*x3*x3 +
+		3.1661*x1*x1*x4 + 19.84*x1*x1*x3;
+
+	return -f;
+}
 
 
 double dist(Punto a, Punto b)
@@ -107,7 +145,6 @@ void normalizar(Pos &X){
 	n=(1/(sqrt(n)+0.0001));
 	if(n!=0){
 		X=prod_escalar(X,n);
-		
 	}
 	
 }
@@ -115,7 +152,7 @@ void normalizar(Pos &X){
 
 double modulo(Pos &X){
 	double m=0;
-	if(X.size()==1) {return abs(X.at(0));}
+	if(X.size()==1) {return fabs(X.at(0));}
 	for(size_t i=0;i<X.size();i++) { 
 		m+=pow(X[i],2);
 	}

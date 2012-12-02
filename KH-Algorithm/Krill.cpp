@@ -4,9 +4,17 @@
 #include <iostream>
 using namespace std;
 
+void mostrar_vector(Pos &v){
+	for(size_t i=0;i<v.size();i++) { 
+		cout<<v[i]<<", ";
+	}
+	cout<<endl;
+}
+
+
 Krill::Krill(Rango &ranfp, Pos inicial, int dni,double delta_t, double N_m, double V_f, double D_m) {
 	//this->manada = manada;
-	this->rango = rango;
+	this->rango = ranfp;
 	this->X=inicial;
 	this->dim=this->X.size();
 	this->id=dni;
@@ -104,6 +112,7 @@ int Krill::get_id(){
 void Krill::actualizar_pos(Pos &alpha_i,Pos &Beta_i_food, double &D_coef){
 	///< to do: falta considera N_max, y Vf
 	///<Genero el vector direccion aletorio gamma y lo normalizo
+	
 	for(int i=0;i<this->dim;i++) { 
 		this->D[i]=((rand()%100)/100.0);
 	}
@@ -121,14 +130,20 @@ void Krill::actualizar_pos(Pos &alpha_i,Pos &Beta_i_food, double &D_coef){
 
 	//Actualizo la posicion
 	Pos nueva = sum(this->X,prod_escalar(sum(this->N,sum(this->F,this->D)),this->dt));
+	if (isinf(fitness_vessel(nueva)))
+		return;
+		
 	bool act = true;
-	Rango &rango = this->rango;
-	for (size_t i=0; i<rango.size(); ++i){
-		if (this->X.at(i) < rango[i].first || this->X.at(i) > rango[i].second){
-			act = false;
-			break;
-		}
-	}
+	//Rango &rango = this->rango;
+	//for (size_t i=0; i<rango.size(); ++i){
+		//if (this->X.at(i) < rango[i].first or this->X.at(i) > rango[i].second){
+		////if (this->X.at(i) < 0){
+			////cout<<"Inválida:\n";
+			////mostrar_vector(nueva);
+			//act = false;
+			//break;
+		//}
+	//}
 	
 	if (act)
 		this->X = nueva;

@@ -3,14 +3,64 @@
 #include <cmath>
 #include <algorithm>
 #include <ctime>
+#include <limits>
+#include "../GA/utils.h"
 
 #define rand_01 ((double)rand() / (double)RAND_MAX)
 
-const int numofdims = 1;
-const int numofparticles = 100;
+const int numofdims = 4;
+const int numofparticles = 250;
 const int max_iter = 10;
 
+int cant_eval_func = 0;
+
 using namespace std;
+
+/*
+double fitness_bat1(double x1, double x2, double x3, double x4)
+{
+    cant_eval_func++;
+    
+    //double f = 0.6224*x1*x3*x4 + 1.7781*x2*x3*x3 +
+		//3.1661*x1*x1*x4 + 19.84*x1*x1*x3, C = 500;
+        
+	//f += C * ( pow(max(0.0, -x1 + 0.0193*x3), 2) + pow(max(0.0, -x2 + 0.00954*x3), 2)
+		//+ pow(max(0.0, -M_PI*x3*x3*x4 - (4.0/3.0)*M_PI*pow(x3, 3) + 1296000), 2)
+		//+ pow(max(0.0, x4 - 240), 2) );
+
+	//f -= C * ( pow(max(0.0, 0.0625 - x1), 2) + pow(max(0.0, x1 - 6.1875), 2) +
+		//pow(max(0.0, 0.0625 - x2), 2) + pow(max(0.0, x2 - 6.1875), 2) +
+		//pow(max(0.0, 10 - x3), 2) + pow(max(0.0, x3 - 200), 2) + pow(max(0.0, 10 - x4), 2)
+		//+ pow(max(0.0, x4 - 200), 2) );
+
+
+    double fitnessmalo = numeric_limits<double>::infinity();
+
+    if (x1 < 0.0625 || x1 > 6.1875 || x2 < 0.0625 || x2 > 6.1875)
+		return fitnessmalo;
+        
+	if (x3 < 10 || x3 > 200 || x4 < 10 || x4 > 200)
+		return fitnessmalo;
+        
+	if (-x1 + 0.0193*x3 > 0)
+		return fitnessmalo;
+
+	if (-x2 + 0.00954*x3 > 0)
+		return fitnessmalo;
+
+	if (-M_PI*x3*x3*x4 - (4.0/3.0)*M_PI*pow(x3, 3) + 1296000 > 0)
+		return fitnessmalo;
+
+	if (x4 - 240 > 0)
+		return fitnessmalo;
+
+	double f = 0.6224*x1*x3*x4 + 1.7781*x2*x3*x3 +
+		3.1661*x1*x1*x4 + 19.84*x1*x1*x3, C = 500;
+	return f;
+}
+*/
+
+
 
 void fitnessfunc(double X[numofparticles][numofdims], double fitnesses[numofparticles])
 {
@@ -34,8 +84,19 @@ void fitnessfunc(double X[numofparticles][numofdims], double fitnesses[numofpart
             //r+= (aux*aux);
         //}
 
-        double r = -X[i][0] * sin(sqrt(fabs(X[i][0])));
-        
+//
+        //double &x1 = X[i][0];
+        //double &x2 = X[i][1];
+        //double &x3 = X[i][2];
+        //double &x4 = X[i][3];
+//
+        //double r = fitness_bat1(x1, x2, x3, x4);
+
+
+        //double r = -X[i][0] * sin(sqrt(fabs(X[i][0])));
+
+        double x = X[i][0];
+        double r = x + 5*sin(3*x) + 8*cos(5*x);
         fitnesses[i] = r;
     }
 }
@@ -65,6 +126,8 @@ void PSO(int numofiterations, double c1, double c2,
     double minfit;
     int   minfitidx;
 
+    vector<double> fmejor;
+
     memcpy(X, initialpop, sizeof(double) * numofparticles * numofdims);
     fitnessfunc(X, fitnesses);
     minfit = *min_element(fitnesses, fitnesses + numofparticles);
@@ -92,12 +155,24 @@ void PSO(int numofiterations, double c1, double c2,
         }
         for(int i = 0; i < numofparticles; i++)
         {
+
+            double viejo[numofdims];
+            for(int j = 0; j < numofdims; j++){
+                viejo[j] = X[i][j];
+            }
+            
             for(int j = 0; j < numofdims; j++)
             {
                 V[i][j] = min(max((w * V[i][j] + rand_01 * c1 * (pbests[i][j] - X[i][j])
                                    + rand_01 * c2 * (gbest[j] - X[i][j])), Vmin[j]), Vmax[j]);
-                X[i][j] = min(max((X[i][j] + V[i][j]), Xmin[j]), Xmax[j]);
+                viejo[j] = min(max((viejo[j] + V[i][j]), Xmin[j]), Xmax[j]);
             }
+
+            //if (!isinf(fitness_bat1(viejo[0], viejo[1], viejo[2], viejo[3]))){
+                for(int j = 0; j < numofdims; j++){
+                    X[i][j] = viejo[j];
+                }
+            //}
         }
 
         fitnessfunc(X, fitnesses);
@@ -109,6 +184,8 @@ void PSO(int numofiterations, double c1, double c2,
             memcpy(gbest, X[minfitidx], sizeof(double) * numofdims);
         }
 
+        fmejor.push_back(*gbestfit); //guardo mejores fitness
+
         if (fabs(*gbestfit) < 1e-3){
             cout<<"Cortó en la it: "<<t<<" - Sol: "<<*gbestfit<<endl;
             break;
@@ -119,6 +196,8 @@ void PSO(int numofiterations, double c1, double c2,
         meanfits[t] = mean(fitnesses, numofparticles);
     }
 
+    fmejor.push_back(cant_eval_func);
+    crear_dat_vector(fmejor, "fmejor.dat");
 
 }
 
@@ -135,17 +214,36 @@ int main()
     double gbest[numofdims];
     for(int i = 0; i < numofdims; i++)
     {
-        xmax[i] = 512;
-        xmin[i] = -512;
+        xmax[i] = 256;
+        xmin[i] = 0;
     }
-    for(int i = 0; i < numofparticles; i++)
+
+    //xmax[0] = 6.1875; xmin[0] = 0.0625;
+    //xmax[1] = 6.1875; xmin[1] = 0.0625;
+    //xmax[2] = 200; xmin[2] = 10;
+    //xmax[3] = 200; xmin[3] = 10;
+    
+    
+    int i=0;
+    while (i < numofparticles){
         for(int j = 0; j < numofdims; j++)
         {
-            initpop[i][j] = rand() % (100 + 100 + 1) - 100;
+            initpop[i][j] = rand() % (int)(xmax[j] - xmin[j] + 1);// - xmax[j];
+            //cout<<initpop[i][j]<<" ";
         }
+        i++;
+        //if (!isinf(fitness_bat1(initpop[i][0], initpop[i][1], initpop[i][2],
+            //initpop[i][3]))){
+            //cout<<"uno válido!"<<endl;
+            //i++;
+        //}
+    }
 
+    cant_eval_func = 0;
+    cout<<"listo"<<endl;cout.flush();
     PSO(max_iter, 2, 2, xmin, xmax, initpop, worsts, meanfits, bests, &gbestfit, gbest);
 
     cout<<"fitness: "<<gbestfit<<endl;
+    //cout<<"evaluaciones: "<<cant_eval_func<<endl;
     return 0;
 }

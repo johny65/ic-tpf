@@ -8,7 +8,7 @@
 #include "Network.h"
 
 const int numofdims = 30+110+11;
-const int numofparticles = 10;
+const int numofparticles = 25;
 const int max_iter = 10;
 Network Red;
 using namespace std;
@@ -58,7 +58,8 @@ void PSO(int numofiterations, double c1, double c2,
 	arq.push_back(1);
 	Red.setear_arquitectura(arq);
     
-		
+	vector<double> fmejor;
+	
 	double V[numofparticles][numofdims] = {0};
     double X[numofparticles][numofdims];
     double Vmax[numofdims];
@@ -120,6 +121,8 @@ void PSO(int numofiterations, double c1, double c2,
             *gbestfit = minfit;
             memcpy(gbest, X[minfitidx], sizeof(double) * numofdims);
         }
+		
+		fmejor.push_back(-*gbestfit); //guardo mejores fitness
 
         if (fabs(*gbestfit) < 1e-3){
             cout<<"Cortó en la it: "<<t<<" - Sol: "<<*gbestfit<<endl;
@@ -131,7 +134,7 @@ void PSO(int numofiterations, double c1, double c2,
         meanfits[t] = mean(fitnesses, numofparticles);
     }
 
-
+	crear_dat_vector(fmejor, "fmejor");
 }
 
 int main()

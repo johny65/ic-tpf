@@ -24,12 +24,16 @@ long_line_behaviour=1
 long_line_column=79
 
 [files]
-current_page=1
-FILE_NAME_0=6639;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2Fherd.cpp;0;4
-FILE_NAME_1=1607;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2Fmain.cpp;0;4
+current_page=0
+FILE_NAME_0=962;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2Fmain.cpp;0;4
+FILE_NAME_1=6078;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2Fherd.cpp;0;4
+FILE_NAME_2=900;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2Ffunc.cpp;0;4
+FILE_NAME_3=687;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2Fherd.h;0;4
+FILE_NAME_4=213;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2FKrill.h;0;4
+FILE_NAME_5=1752;C++;0;16;1;1;0;%2Fhome%2Fjohny%2FDocumentos%2Ftpf-ic%2FKH-Algorithm%2Ffunc.h;0;4
 
 [VTE]
-last_dir=/home/johny/Documentos/tpf-ic/KH-Algorithm
+last_dir=/home/johny/Documentos/tpf-ic/KH-Algorithm/Debug
 
 [gproject]
 source_patterns=*.c;*.C;*.cpp;*.cxx;*.c++;*.cc;

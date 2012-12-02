@@ -91,4 +91,11 @@ void normalizar(Pos &X);
 
 double modulo(Pos &X);
 void mostrar(Pos &Y);
+
+/**
+ * Función de fitness para el problema del tubo.
+ */
+double fitness_vessel(Pos &X);
+
 #endif
+

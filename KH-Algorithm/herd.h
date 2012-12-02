@@ -18,7 +18,7 @@ private:
 	double C_best, C_food, D_diffusion; ///< Coeficientes
 	double w; ///< Cálculo de los w para que disminuyan con el tiempo
 	
-	double fitness(Pos X, int id);
+	double fitness(Pos &X, int id);
 	double K_best, K_worst; ///<Mejor fitness y peor fitness en cada iteracion
 	int mejor, peor; ///<indices del mejor y el peor
 	bool graf; ///<Opcion para graficar
@@ -48,9 +48,9 @@ private:
 	
 	
 public:
-	herd(int cant_k, int dimension, vector<pair<double,double> >, double delta_t, double, double, double);
+	herd(int cant_k, int dimension, vector<pair<double,double> >, double delta_t, double, double, double, int);
 	~herd();
-	void set_fitness(); ///<Setea la funcion de fitness a utilizar "ver como hacer esto"
+	void set_fitness(void); ///<Setea la funcion de fitness a utilizar "ver como hacer esto"
 	void set_max_it(int);
 //	void set_sensing_d(double); ///<Setea la distancia para evaluar los vecinos
 	void set_graf(bool); ///<True: si se desea graficar 
